@@ -8,6 +8,7 @@ import { additem } from "../utils/cartSlice";
 import { analyzeMeal } from "../utils/allergens";
 import DietBadges from "./DietBadges";
 import SimilarDishes from "./SimilarDishes";
+import Reviews from "./Reviews";
 
 const RestaurantMenu = () => {
   const { resId } = useParams();
@@ -72,6 +73,9 @@ const RestaurantMenu = () => {
 
       <h2 className="text-xl font-bold mt-8 mb-3">Instructions</h2>
       <p className="text-gray-700 whitespace-pre-line">{resInfo.strInstructions}</p>
+
+      {/* AI: reviews with sentiment badges (😊 / 😐 / 😞) */}
+      <Reviews mealId={resInfo.idMeal} />
 
       {/* AI: dishes with similar ingredients */}
       <SimilarDishes meal={resInfo} />
