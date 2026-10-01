@@ -2,8 +2,7 @@
 
 **A food ordering app where the AI runs inside your browser.** Search for food by feeling, voice or photo, chat with an assistant that knows your cart, and get picks that learn your taste. There is no backend, no API key and no cost.
 
-🔗 **Live demo:** https://YOUR-SITE-NAME.netlify.app
-<!-- TODO: after deploying on Netlify, replace the link above with your real site link -->
+🔗 **Live demo:** https://foodflick-ai.netlify.app
 
 | Home | Dish page |
 |---|---|
