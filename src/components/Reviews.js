@@ -40,7 +40,7 @@ const Reviews = ({ mealId }) => {
   const summary = summarizeReviews(reviews);
 
   return (
-    <div className="mt-10">
+    <div className="bg-white rounded-2xl shadow-sm p-5 md:p-6 mt-6">
       <h2 className="text-xl font-bold mb-1">💬 Reviews</h2>
 
       {summary && (
@@ -51,14 +51,14 @@ const Reviews = ({ mealId }) => {
       )}
 
       <textarea
-        className="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none"
+        className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 focus:outline-none"
         rows="3"
         placeholder="How was this dish?"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
       <button
-        className="mt-2 bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition disabled:opacity-50"
+        className="mt-2 bg-orange-500 text-white font-semibold px-6 py-2 rounded-xl hover:bg-orange-600 transition disabled:opacity-50"
         onClick={submit}
         disabled={busy || !text.trim()}
       >
@@ -73,7 +73,7 @@ const Reviews = ({ mealId }) => {
         {reviews.map((review, index) => {
           const ui = SENTIMENT_UI[review.label];
           return (
-            <li key={index} className="p-3 border border-gray-200 rounded-md">
+            <li key={index} className="p-3 border border-gray-100 bg-gray-50 rounded-xl">
               <div className="flex items-center gap-2 mb-1">
                 <span className={"px-2 py-0.5 rounded-full text-xs font-semibold " + ui.classes}>
                   {ui.emoji} {ui.text}

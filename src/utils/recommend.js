@@ -15,7 +15,7 @@ const COMMON_INGREDIENTS = [
   "vegetable oil", "sunflower oil", "sugar",
 ];
 
-const getKeyIngredients = (meal) =>
+export const getKeyIngredients = (meal) =>
   getIngredients(meal).filter((name) => !COMMON_INGREDIENTS.includes(name));
 
 // Compare two meals. Returns the score and the list of shared ingredients.

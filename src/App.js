@@ -11,8 +11,10 @@ import RestaurantMenu from "./components/RestaurantMenu";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Cart from "./components/Cart";
+import Payment from "./components/Payment";
 import ErrorPage from "./components/Error";
 import MealPlanner from "./components/MealPlanner";
+import FlickBot from "./components/FlickBot";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 
@@ -22,9 +24,10 @@ const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => {
   return (
     <Provider store={appStore}>
-      <div className="app">
+      <div className="app min-h-screen bg-gray-50 text-gray-800">
         <Header />
         <Outlet />
+        <FlickBot />
       </div>
     </Provider>
   );
@@ -66,6 +69,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/payment",
+        element: <Payment />,
       },
       {
         path: "/planner",

@@ -2,28 +2,24 @@ const RestaurantCard = ({ resData }) => {
   const { restaurantName, dishName, image, rating, deliveryTime, price } = resData;
 
   return (
-    <div className="bg-white rounded-lg shadow hover:shadow-lg transition-transform transform hover:scale-105 duration-200 ease-in-out w-full h-full flex flex-col">
+    <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition duration-200 w-full h-full flex flex-col overflow-hidden">
       {/* Dish Image (/medium gives a smaller image so the page loads faster) */}
-      <img
-        className="w-full h-40 object-cover rounded-t-lg"
-        alt={dishName}
-        src={image + "/medium"}
-      />
+      <div className="relative">
+        <img className="w-full h-40 object-cover" alt={dishName} src={image + "/medium"} />
+        <span className="absolute bottom-2 left-2 bg-white/90 text-gray-800 text-xs font-bold px-2 py-1 rounded-full">
+          ⭐ {rating}
+        </span>
+      </div>
 
       {/* Restaurant Info */}
-      <div className="flex flex-col justify-between flex-grow p-4">
-        <h3 className="text-base font-bold text-gray-800 truncate">{restaurantName}</h3>
+      <div className="flex flex-col flex-grow p-4">
+        <h3 className="font-bold text-gray-800 truncate">{restaurantName}</h3>
+        <p className="text-sm text-gray-500 line-clamp-2 mt-1">{dishName}</p>
 
-        <div className="mt-2">
-          <div className="text-xs text-gray-600 flex items-center gap-2 mb-1 font-bold">
-            <span className="text-yellow-500">{rating} ⭐</span>
-            <span className="text-gray-400">|</span>
-            <span>{deliveryTime} min</span>
-          </div>
-          <p className="text-xs text-gray-500 line-clamp-2 font-bold">{dishName}</p>
+        <div className="mt-auto pt-3 flex items-center justify-between text-sm">
+          <span className="font-bold text-orange-600">₹{price}</span>
+          <span className="text-gray-500">🕒 {deliveryTime} min</span>
         </div>
-
-        <div className="mt-auto pt-2 text-xs font-bold text-gray-600">₹{price}</div>
       </div>
     </div>
   );

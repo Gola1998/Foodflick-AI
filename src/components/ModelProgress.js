@@ -5,7 +5,7 @@ const ModelProgress = ({ model, what, size }) => {
   if (model.state !== "loading") return null;
 
   return (
-    <div className="mt-3 max-w-md mx-auto text-left">
+    <div className="mt-3 max-w-md text-left">
       <p className="text-xs text-gray-600">
         ⬇️ Downloading the {what} AI model ({size}, first time only)... {model.percent}%
       </p>

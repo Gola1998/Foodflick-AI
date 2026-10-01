@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import ItemList from "./ItemList";
 import CartSuggestions from "./CartSuggestions";
 import { clearCart } from "../utils/cartSlice";
@@ -14,34 +15,66 @@ const Cart = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">🛒 Your Shopping Cart</h1>
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-extrabold text-gray-800 mb-6">🛒 Your cart</h1>
 
       {cartItems.length === 0 ? (
-        <div className="text-center text-gray-500 mt-10">
-          <h2 className="text-xl font-semibold">Your cart is empty</h2>
-          <p className="mt-2">Add some items to get started!</p>
+        <div className="bg-white rounded-2xl shadow-sm text-center py-16 px-4">
+          <p className="text-6xl">🛒</p>
+          <h2 className="text-xl font-bold text-gray-800 mt-4">Your cart is empty</h2>
+          <p className="text-gray-500 mt-1">Add some dishes to get started!</p>
+          <Link
+            to="/"
+            className="inline-block mt-6 bg-orange-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-orange-600 transition"
+          >
+            Browse dishes
+          </Link>
         </div>
       ) : (
-        <>
-          <ItemList items={cartItems} />
+        // phones: one column. Big screens: items on the left (2/3), summary on the right (1/3)
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl shadow-sm px-5">
+              <ItemList items={cartItems} />
+            </div>
 
-          <div className="flex justify-between items-center mt-6">
-            <h2 className="text-xl font-semibold text-gray-700">
-              Total ({cartItems.length} items): <span className="font-bold">₹{total}</span>
-            </h2>
-
-            <button
-              onClick={handleClearCart}
-              className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition"
-            >
-              Clear Cart
-            </button>
+            {/* AI: suggests the missing course (dessert / starter) */}
+            <CartSuggestions cartItems={cartItems} />
           </div>
 
-          {/* AI: suggests the missing course (dessert / starter) */}
-          <CartSuggestions cartItems={cartItems} />
-        </>
+          {/* Order summary (sticks under the header while you scroll on big screens) */}
+          <div className="bg-white rounded-2xl shadow-sm p-5 lg:sticky lg:top-20">
+            <h2 className="font-bold text-lg mb-4">Order summary</h2>
+
+            <div className="flex justify-between text-gray-600">
+              <span>Items</span>
+              <span>{cartItems.length}</span>
+            </div>
+            <div className="flex justify-between text-xl font-extrabold mt-3 pt-3 border-t border-gray-100">
+              <span>Total</span>
+              <span className="text-orange-600">₹{total}</span>
+            </div>
+
+            <Link
+              to="/payment"
+              className="block text-center mt-5 bg-orange-500 text-white font-semibold py-3 rounded-xl hover:bg-orange-600 transition"
+            >
+              Proceed to pay ₹{total}
+            </Link>
+            <Link
+              to="/"
+              className="block text-center mt-3 border border-orange-500 text-orange-600 font-semibold py-2.5 rounded-xl hover:bg-orange-50 transition"
+            >
+              + Add more dishes
+            </Link>
+            <button
+              onClick={handleClearCart}
+              className="w-full mt-3 text-sm font-semibold text-red-500 hover:text-red-700"
+            >
+              Clear cart
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

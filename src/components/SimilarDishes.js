@@ -53,7 +53,7 @@ const SimilarDishes = ({ meal }) => {
         Picked by comparing ingredients with this dish.
       </p>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {similar.map(({ meal: m, shared }) => (
           <div key={m.idMeal} className="flex flex-col">
             <Link to={"/restaurant/" + m.idMeal} className="flex-1">

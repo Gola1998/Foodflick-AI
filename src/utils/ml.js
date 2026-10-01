@@ -11,7 +11,7 @@
 
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.0";
 
-// The two models we use. "q8" = quantized, a smaller file with almost the same quality.
+// The models we use. "q8" = quantized, a smaller file with almost the same quality.
 const MODELS = {
   embedder: {
     task: "feature-extraction",
@@ -21,6 +21,10 @@ const MODELS = {
     task: "sentiment-analysis",
     name: "Xenova/distilbert-base-uncased-finetuned-sst-2-english", // about 65 MB
   },
+  clip: {
+    task: "zero-shot-image-classification",
+    name: "Xenova/clip-vit-base-patch32", // compares a photo with any text labels (about 90 MB)
+  },
 };
 
 // ---------- 1. Status (so the screen can show "Downloading... 40%") ----------
@@ -29,6 +33,7 @@ const MODELS = {
 let status = {
   embedder: { state: "idle", percent: 0 },
   sentiment: { state: "idle", percent: 0 },
+  clip: { state: "idle", percent: 0 },
 };
 const listeners = new Set();
 

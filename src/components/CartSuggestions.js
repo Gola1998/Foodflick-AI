@@ -68,16 +68,16 @@ const CartSuggestions = ({ cartItems }) => {
   if (!course || toShow.length === 0) return null;
 
   return (
-    <div className="mt-8 p-4 bg-orange-50 rounded-lg">
+    <div className="mt-6 p-5 bg-orange-50 rounded-2xl">
       <h3 className="font-bold text-gray-800 mb-3">{messages[course]}</h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {toShow.map((item) => (
-          <div key={item.id} className="bg-white rounded-lg shadow p-3 flex flex-col">
+          <div key={item.id} className="bg-white rounded-xl shadow-sm p-3 flex flex-col">
             <img
               src={item.image + "/small"}
               alt={item.dishName}
-              className="w-full h-24 object-cover rounded"
+              className="w-full h-24 object-cover rounded-lg"
             />
             <p className="font-semibold text-sm mt-2 line-clamp-2">{item.dishName}</p>
             <p className="text-xs text-gray-500">₹{item.price}</p>

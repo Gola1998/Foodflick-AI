@@ -6,9 +6,15 @@ import useOnlineStatus from "../utils/useOnlineStatus";
 import Footer from "./Footer";
 import { FOOD_API } from "../utils/constants";
 import makeRestaurant from "../utils/makeRestaurant";
-import SmartSearch from "./SmartSearch";
+import SearchHero from "./SearchHero";
+import ForYou from "./ForYou";
+import useSmartSearch from "../utils/useSmartSearch";
 
 const cuisines = ["Italian", "Chinese", "Mexican", "Thai", "Japanese", "French", "American", "British", "Greek", "Spanish"];
+const cuisineEmoji = {
+  Italian: "🍝", Chinese: "🥡", Mexican: "🌮", Thai: "🍜", Japanese: "🍣",
+  French: "🥐", American: "🍔", British: "🫖", Greek: "🥙", Spanish: "🥘",
+};
 
 const Body = () => {
   const [listOfRestaurant, setListOfRestaurant] = useState([]);
@@ -16,14 +22,14 @@ const Body = () => {
   const [searchText, setSearchText] = useState("");
   const [cuisine, setCuisine] = useState("Italian");
   const [loading, setLoading] = useState(true);
-  // AI: result of Smart search / mood chips. null = show the normal list.
+  // AI: result of Smart search / mood chips / photo. null = show the normal list.
   const [smart, setSmart] = useState(null);
-  const [smartKey, setSmartKey] = useState(0); // changing this number resets the Smart search box
+  const ai = useSmartSearch(allRestaurants, setSmart); // the Smart search logic
 
-  // go back to the normal list and empty the Smart search box
+  // go back to the normal list
   const resetSmart = () => {
     setSmart(null);
-    setSmartKey((k) => k + 1);
+    ai.reset();
   };
 
   // runs on first load and again whenever the cuisine changes
@@ -49,6 +55,17 @@ const Body = () => {
     setLoading(false);
   };
 
+  // the normal search: keep the dishes whose name contains the text
+  const searchDishes = (text) => {
+    resetSmart();
+    const filteredRes = allRestaurants.filter(
+      (res) =>
+        res.restaurantName.toLowerCase().includes(text.toLowerCase()) ||
+        res.dishName.toLowerCase().includes(text.toLowerCase())
+    );
+    setListOfRestaurant(filteredRes);
+  };
+
   const onlineStatus = useOnlineStatus();
   if (!onlineStatus) {
     return (
@@ -60,64 +77,63 @@ const Body = () => {
 
   return (
     <div className="px-4 py-6 max-w-screen-xl mx-auto">
-      {/* Search and Filter */}
-      <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-80 px-5 py-3 border border-gray-300 rounded-md text-base focus:ring-2 focus:ring-orange-400 focus:outline-none"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <button
-          className="bg-orange-500 text-white px-6 py-3 text-base rounded-md hover:bg-orange-600 transition"
-          onClick={() => {
-            resetSmart();
-            const filteredRes = allRestaurants.filter(
-              (res) =>
-                res.restaurantName.toLowerCase().includes(searchText.toLowerCase()) ||
-                res.dishName.toLowerCase().includes(searchText.toLowerCase())
-            );
-            setListOfRestaurant(filteredRes);
-          }}
-        >
-          Search
-        </button>
-        <select
-          className="px-4 py-3 border border-gray-300 rounded-md text-base"
-          value={cuisine}
-          onChange={(e) => setCuisine(e.target.value)}
-        >
-          {cuisines.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <button
-          className="bg-orange-500 text-white px-6 py-3 text-sm rounded-md hover:bg-orange-600 transition"
-          onClick={() => {
-            resetSmart();
-            const filteredList = allRestaurants.filter((res) => res.rating > 4.5);
-            setListOfRestaurant(filteredList);
-          }}
-        >
-          ⭐ Top Rated Restaurants
-        </button>
-      </div>
+      {/* One search bar: name, feeling (AI), voice, photo and mood chips */}
+      <SearchHero
+        searchText={searchText}
+        setSearchText={setSearchText}
+        onNameSearch={searchDishes}
+        restaurants={allRestaurants}
+        ai={ai}
+        onResults={setSmart}
+      />
 
-      {/* AI: Smart search + mood chips (searches inside the selected cuisine) */}
-      <SmartSearch key={cuisine + smartKey} restaurants={allRestaurants} onResults={setSmart} />
+      {/* AI: picks learned from what the user viewed and added to the cart */}
+      {!smart && <ForYou />}
+
+      {/* Cuisine pills (they scroll sideways on small screens) */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-6">
+        {cuisines.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCuisine(c)}
+            className={
+              "shrink-0 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap border transition " +
+              (cuisine === c
+                ? "bg-orange-500 text-white border-orange-500 shadow"
+                : "bg-white text-gray-700 border-gray-200 hover:border-orange-400")
+            }
+          >
+            {cuisineEmoji[c]} {c}
+          </button>
+        ))}
+      </div>
 
       {/* AI: explains what the results are */}
       {smart && (
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <p className="text-sm text-gray-600">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 text-gray-700">
+          <p className="text-sm">
             🧠 Best {cuisine} matches for <b>{smart.label}</b>
             {!smart.usedAI && " (AI model unavailable, matched by keywords)"}
           </p>
           <button className="text-sm font-semibold text-orange-600" onClick={resetSmart}>
             ✕ Clear
+          </button>
+        </div>
+      )}
+
+      {/* Heading + Top Rated filter */}
+      {!smart && !loading && (
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">🍽️ {cuisine} dishes</h2>
+          <button
+            className="px-4 py-1.5 rounded-full text-sm font-semibold border border-yellow-400 text-yellow-700 bg-yellow-50 hover:bg-yellow-100 transition"
+            onClick={() => {
+              resetSmart();
+              const filteredList = allRestaurants.filter((res) => res.rating > 4.5);
+              setListOfRestaurant(filteredList);
+            }}
+          >
+            ⭐ Top Rated
           </button>
         </div>
       )}
@@ -130,7 +146,7 @@ const Body = () => {
           {smart ? "No dishes matched. Try different words or a mood chip." : "No restaurants found."}
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {(smart
             ? smart.items
             : listOfRestaurant.map((restaurant) => ({ restaurant, score: null }))

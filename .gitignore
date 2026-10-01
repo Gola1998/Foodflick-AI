@@ -1,3 +1,6 @@
 /node_modules
 /dist
-.parcel-cachecoverage
+.parcel-cache
+coverage
+.env
+.env.*

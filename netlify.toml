@@ -1,0 +1,17 @@
+# Netlify reads this file automatically, so you do not have to type these settings.
+
+[build]
+  command = "npm run build"   # runs: parcel build index.html
+  publish = "dist"            # the folder Parcel creates
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# React Router changes pages inside the browser. Without this rule, opening or
+# refreshing a link like /cart or /restaurant/52772 gives "Page not found",
+# because no such file exists on the server. This sends every URL to index.html
+# and lets React Router show the right page.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

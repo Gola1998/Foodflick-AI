@@ -10,29 +10,29 @@ const ItemList = ({ items }) => {
       {items.map((item, index) => (
         <div
           key={`${item.id}-${index}`} // combine id with index so duplicates get a unique key
-          className="flex flex-col md:flex-row justify-between gap-4 py-4 border-b border-gray-200"
+          className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-b-0"
         >
-          {/* Left Info */}
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold">{item.dishName}</h3>
-            <p className="text-gray-600 text-sm mt-1">{item.restaurantName}</p>
-            <p className="text-md font-medium mt-2">₹{item.price}</p>
-          </div>
+          {/* Image */}
+          <img
+            src={item.image + "/small"}
+            alt={item.dishName}
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover shrink-0"
+          />
 
-          {/* Right Image + Button */}
-          <div className="relative md:w-40 w-full">
-            <img
-              src={item.image + "/small"}
-              alt={item.dishName}
-              className="rounded-lg w-full h-24 object-cover"
-            />
+          {/* Info + Remove (min-w-0 lets a long name be cut with ...) */}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-800 truncate">{item.dishName}</h3>
+            <p className="text-sm text-gray-500 truncate">{item.restaurantName}</p>
             <button
-              className="absolute bottom-2 right-2 bg-white border border-gray-300 px-3 py-1 rounded text-sm shadow-md hover:bg-gray-50"
+              className="mt-1 text-sm font-semibold text-red-500 hover:text-red-700"
               onClick={() => dispatch(removeItem(index))}
             >
               Remove
             </button>
           </div>
+
+          {/* Price */}
+          <p className="font-bold text-gray-800">₹{item.price}</p>
         </div>
       ))}
     </div>
