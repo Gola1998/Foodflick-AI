@@ -7,11 +7,11 @@
 
 | Home | Dish page |
 |---|---|
-| ![Home page](screenshots/home.png) | ![Dish page](screenshots/dish.png) |
+| ![Home page](screenshots/homePage.png) | ![Dish page](screenshots/dishPage.png) |
 
 | AI search results | Cart and payment |
 |---|---|
-| ![Smart search results](screenshots/ai-search.png) | ![Cart](screenshots/cart.png) |
+| ![Smart search results](screenshots/smartSearch.png) | ![Cart](screenshots/cartPage.png) |
 
 ---
 
